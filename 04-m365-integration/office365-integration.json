@@ -1,0 +1,72 @@
+{
+  "policy_ids": [
+    "${AGENT_POLICY_ID}"
+  ],
+  "package": {
+    "name": "o365",
+    "version": "2.11.0"
+  },
+  "name": "o365-1",
+  "description": "Microsoft Office 365 audit logs via Management Activity API",
+  "namespace": "",
+  "inputs": {
+    "o365-o365audit": {
+      "enabled": false,
+      "streams": {
+        "o365.audit": {
+          "enabled": false,
+          "vars": {
+            "tenants": [
+              "tenant-id"
+            ],
+            "tenant_names": [
+              "tenant-id: domain-name"
+            ],
+            "content_type": [
+              "Audit.AzureActiveDirectory",
+              "Audit.Exchange",
+              "Audit.SharePoint",
+              "Audit.General",
+              "DLP.All"
+            ],
+            "tags": [
+              "forwarded",
+              "o365-audit"
+            ],
+            "preserve_original_event": false,
+            "processors": "#- add_fields:\n#    target: foo\n#    fields:\n#      bar: baz"
+          }
+        }
+      }
+    },
+    "o365-cel": {
+      "enabled": true,
+      "streams": {
+        "o365.audit": {
+          "enabled": true,
+          "vars": {
+            "url": "https://manage.office.com",
+            "interval": "3m",
+            "azure_tenant_id": "${AZURE_TENANT_ID}",
+            "client_id": "${O365_CLIENT_ID}",
+            "client_secret": "${O365_CLIENT_SECRET}",
+            "token_url": "https://login.microsoftonline.com",
+            "token_scopes": [
+              "https://manage.office.com/.default"
+            ],
+            "content_types": "Audit.AzureActiveDirectory, Audit.Exchange, Audit.SharePoint, Audit.General, DLP.All",
+            "initial_interval": "167h55m",
+            "batch_interval": "1h",
+            "resource_timeout": "60s",
+            "resource_redirect_headers_ban_list": [],
+            "tags": [
+              "forwarded",
+              "o365-cel"
+            ],
+            "preserve_original_event": false
+          }
+        }
+      }
+    }
+  }
+}
