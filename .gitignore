@@ -1,0 +1,29 @@
+# 環境変数ファイル（秘密情報を含む）
+.env
+.env.local
+.env.*.local
+
+# TLS 証明書・秘密鍵
+*.key
+*.pem
+*.crt
+*.p12
+certs/
+
+# バックアップファイル
+*.bak
+*.backup
+*~
+
+# OS 生成ファイル
+.DS_Store
+Thumbs.db
+
+# エディタ設定
+.vscode/
+.idea/
+*.swp
+
+# ログファイル
+*.log
+logs/
