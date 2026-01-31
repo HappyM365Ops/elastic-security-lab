@@ -1,0 +1,52 @@
+# ============================================================
+# Kibana 設定ファイル
+# ============================================================
+server.host: "0.0.0.0"
+server.shutdownTimeout: "5s"
+monitoring.ui.container.elasticsearch.enabled: true
+
+# ============================================================
+# Fleet Preconfiguration
+# ============================================================
+# 外部 Agent が接続できるよう IP アドレスを指定
+xpack.fleet.agents.fleet_server.hosts: ["https://192.168.50.200:8220"]
+
+xpack.fleet.outputs:
+  - id: fleet-default-output
+    name: default
+    type: elasticsearch
+    hosts: ["https://192.168.50.200:9200"]
+    is_default: true
+    is_default_monitoring: true
+    config:
+      ssl:
+        certificate_authorities:
+          - |
+            -----BEGIN CERTIFICATE-----
+            ここに CA 証明書の PEM テキストを貼り付けてください。
+            setup コンテナ起動後に以下のコマンドで取得できます:
+
+            docker run --rm \
+              -v elastic-lab_certs:/certs \
+              alpine cat /certs/ca/ca.crt
+            -----END CERTIFICATE-----
+
+xpack.fleet.packages:
+  - name: fleet_server
+    version: latest
+  - name: system
+    version: latest
+
+xpack.fleet.agentPolicies:
+  - id: fleet-server-policy
+    name: Fleet Server Policy
+    is_default_fleet_server: true
+    namespace: default
+    monitoring_enabled:
+      - logs
+      - metrics
+    package_policies:
+      - id: fleet-server-1
+        name: fleet_server-1
+        package:
+          name: fleet_server
