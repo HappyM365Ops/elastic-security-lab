@@ -27,3 +27,4 @@ Thumbs.db
 # ログファイル
 *.log
 logs/
+__pycache__/
